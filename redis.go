@@ -1,4 +1,4 @@
-package ginUsageStats
+package ginusagestats
 
 import (
 	"context"
@@ -13,9 +13,9 @@ type RedisBackend struct {
 	RedisClient redis.UniversalClient
 }
 
-func (m *RedisBackend) Collect(ctx context.Context, method, endpoint string) error {
+func (m *RedisBackend) Collect(ctx context.Context, method, endpoint string, incr int64) error {
 	key := fmt.Sprintf("%s::%s", method, endpoint)
-	return m.RedisClient.HIncrBy(ctx, "gin-endpoint-usage-stats", key, 1).Err()
+	return m.RedisClient.HIncrBy(ctx, "gin-endpoint-usage-stats", key, incr).Err()
 }
 func (m *RedisBackend) GetStats(ctx context.Context) ([]Stat, error) {
 	stats, err := m.RedisClient.HGetAll(ctx, "gin-endpoint-usage-stats").Result()
@@ -26,7 +26,7 @@ func (m *RedisBackend) GetStats(ctx context.Context) ([]Stat, error) {
 	var statsSlice []Stat
 	for k, v := range stats {
 		endpointData := strings.Split(k, "::")
-		count, _ := strconv.Atoi(v)
+		count, _ := strconv.ParseInt(v, 10, 64)
 		statsSlice = append(statsSlice, Stat{
 			Method:   endpointData[0],
 			Endpoint: endpointData[1],

@@ -1,4 +1,4 @@
-package ginUsageStats
+package ginusagestats
 
 import (
 	"context"
@@ -8,15 +8,15 @@ import (
 )
 
 type InMemoryBackend struct {
-	stats map[string]int
+	stats map[string]int64
 	mutex sync.Mutex
 }
 
-func (b *InMemoryBackend) Collect(_ context.Context, method, endpoint string) error {
+func (b *InMemoryBackend) Collect(_ context.Context, method, endpoint string, incr int64) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	if b.stats == nil {
-		b.stats = make(map[string]int)
+		b.stats = make(map[string]int64)
 	}
 	key := fmt.Sprintf("%s::%s", method, endpoint)
 	b.stats[key]++

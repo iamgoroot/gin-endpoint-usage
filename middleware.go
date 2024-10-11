@@ -1,4 +1,4 @@
-package ginUsageStats
+package ginusagestats
 
 import (
 	"context"
@@ -13,12 +13,12 @@ import (
 type Stat struct {
 	Method   string `json:"method"`
 	Endpoint string `json:"endpoint"`
-	Count    int    `json:"count"`
+	Count    int64  `json:"count"`
 }
 
 type StatMiddleware struct {
 	Backend interface {
-		Collect(ctx context.Context, method, endpoint string) error
+		Collect(ctx context.Context, method, endpoint string, incr int64) error
 		GetStats(ctx context.Context) ([]Stat, error)
 	}
 }
@@ -27,6 +27,13 @@ func (m *StatMiddleware) Setup(router *gin.Engine) {
 	router.GET("/endpoint-usage-stats/:type", m.StatsHandler)
 	router.GET("/endpoint-usage-stats", m.StatsHandler)
 	router.Use(m.Stat)
+	routes := router.Routes()
+	for _, route := range routes {
+		if strings.HasPrefix(route.Path, "/endpoint-usage-stats") { // skip own route
+			continue
+		}
+		_ = m.Backend.Collect(context.Background(), route.Method, route.Path, 0)
+	}
 }
 
 func (m *StatMiddleware) Stat(ctx *gin.Context) {
@@ -36,7 +43,7 @@ func (m *StatMiddleware) Stat(ctx *gin.Context) {
 		ctx.Next()
 		return
 	}
-	err := m.Backend.Collect(ctx.Request.Context(), method, endpoint)
+	err := m.Backend.Collect(ctx.Request.Context(), method, endpoint, 1)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -76,5 +83,11 @@ func sortStatsFunc(a, b Stat) int {
 	if a.Count == b.Count {
 		return strings.Compare(a.Endpoint, b.Endpoint)
 	}
-	return b.Count - a.Count
+	if a.Count == b.Count {
+		return 0
+	}
+	if a.Count > b.Count {
+		return -1
+	}
+	return 1
 }

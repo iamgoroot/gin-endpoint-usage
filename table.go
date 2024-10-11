@@ -1,4 +1,4 @@
-package ginUsageStats
+package ginusagestats
 
 import "text/template"
 
