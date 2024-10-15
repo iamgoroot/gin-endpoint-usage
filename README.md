@@ -1,9 +1,9 @@
 # gin-usage-stats
 
-A simple middleware for Gin that allows you to collect usage statistics for your endpoints
-It's intended to use this on your test server while running your autotests to determine unused endpoints.
+A simple middleware for Gin that allows you to collect usage statistics for your endpoints to find unused endpoints.
+It's intended to use this on your test server while running your autotests.
 
-For production setups use prometheus libs for example https://github.com/penglongli/gin-metrics
+For production monitoring use prometheus libs for example https://github.com/penglongli/gin-metrics 
 
 ## Installation
 
