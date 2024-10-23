@@ -1,10 +1,12 @@
 module test
 
-go 1.23.2
+go 1.22
+
+toolchain go1.23.1
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/iamgoroot/gin-usage-stats v0.0.0-00010101000000-000000000000
+	github.com/iamgoroot/gin-endpoint-usage v0.0.0-00010101000000-000000000000
 	github.com/redis/go-redis/v9 v9.6.1
 )
 
@@ -40,4 +42,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/iamgoroot/gin-usage-stats => ./..
+replace github.com/iamgoroot/gin-endpoint-usage => ./..

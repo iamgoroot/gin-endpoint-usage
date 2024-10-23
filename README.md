@@ -10,7 +10,7 @@ For production monitoring use prometheus libs for example https://github.com/pen
 You can install the package via go get:
 
 ```golang
-go get github.com/iamgoroot/gin-usage-stats
+go get github.com/iamgoroot/gin-endpoint-usages
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
-    "github.com/iamgoroot/gin-usage-stats"
+    "github.com/iamgoroot/gin-endpoint-usages"
 )
 
 func main() {

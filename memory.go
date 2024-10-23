@@ -1,4 +1,4 @@
-package ginusagestats
+package ginendpointusage
 
 import (
 	"context"

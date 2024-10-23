@@ -1,8 +1,8 @@
-module github.com/iamgoroot/gin-endpoint-usage-stats
+module github.com/iamgoroot/gin-endpoint-usage
 
 go 1.22
 
-toolchain go1.23.2
+toolchain go1.23.1
 
 require (
 	github.com/gin-gonic/gin v1.10.0

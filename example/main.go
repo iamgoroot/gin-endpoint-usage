@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	ginusagestats "github.com/iamgoroot/gin-usage-stats"
+	ginendpointusage "github.com/iamgoroot/gin-endpoint-usage"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,7 +16,7 @@ func setupRouter() *gin.Engine {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
 	})
-	m := &ginusagestats.StatMiddleware{Backend: &ginusagestats.RedisBackend{RedisClient: rdb}}
+	m := &ginendpointusage.StatMiddleware{Backend: &ginendpointusage.RedisBackend{RedisClient: rdb}}
 	m.Setup(r)
 
 	r.GET("/ping", func(c *gin.Context) {
